@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using entities.Factory;
+using entity_framework;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace wpf_ui
@@ -15,13 +15,24 @@ namespace wpf_ui
     /// </summary>
     public partial class App : Application
     {
+        private readonly IHost _host;
+
         public App()
         {
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) => 
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureServices((host_context, services) => 
                 {
-                    services.
-                });
+                    string db_connection_string = host_context.Configuration.GetConnectionString("Default");
+                    services.AddSingleton<IToyStoreContextCreator>(new ToyStoreDbContextCreator(db_connection_string));
+                }).Build();
+
+            var contextCreator = _host.Services.GetRequiredService<IToyStoreContextCreator>();
+            using (var context = contextCreator.CreateContext())
+            {
+                context.Database.Migrate();
+            }
+
+            
 
         }
     }
