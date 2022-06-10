@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace entities.DTO
 {
@@ -10,5 +11,7 @@ namespace entities.DTO
 
         public int ImageId { get; set; }
         public Image Image { get; set; }
+
+        public ICollection<Toy> Toys { get; set; }
     }
 }
