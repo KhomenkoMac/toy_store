@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using entity_framework;
 
 namespace entity_framework.Migrations
 {
     [DbContext(typeof(ToyStoreDataContext))]
-    partial class ToyStoreDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220529100317_profileToysProps")]
+    partial class profileToysProps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

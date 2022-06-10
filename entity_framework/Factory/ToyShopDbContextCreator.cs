@@ -1,7 +1,8 @@
 ﻿using entity_framework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
-namespace entities.Factory
+namespace entity_framework.Factory
 {
     // Factory Method
     public interface IToyStoreContextCreator
@@ -9,7 +10,7 @@ namespace entities.Factory
         ToyStoreDataContext CreateContext();
     }
 
-    public class ToyStoreDbContextCreator : IToyStoreContextCreator
+    public class ToyStoreDbContextCreator: IToyStoreContextCreator, IDesignTimeDbContextFactory<ToyStoreDataContext>
     {
         private readonly string _connectionString;
         public ToyStoreDbContextCreator(string connectionString)
@@ -24,15 +25,15 @@ namespace entities.Factory
         }
 
         #region Required code for another migration
-        //public ToyStoreDbContextCreator()
-        //{
+        public ToyStoreDbContextCreator()
+        {
 
-        //}
+        }
         // implementation of IDesignTimeDbContextFactory<ToyStoreDataContext>
-        //public ToyStoreDataContext CreateDbContext(string[] args)
-        //{
-        //    return CreateContext();
-        //} 
+        public ToyStoreDataContext CreateDbContext(string[] args)
+        {
+            return CreateContext();
+        } 
         #endregion
     }
 }
