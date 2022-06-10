@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuisnessLogic\BuisnessLogic.csproj" />
     <ProjectReference Include="..\entity_framework\entity_framework.csproj" />
   </ItemGroup>
 
