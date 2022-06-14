@@ -15,7 +15,6 @@ namespace BuisnessLogic
                 Rate = obj.Rate,
                 Description = obj.Description,
                 Subject = (Subject)obj.Subject,
-                ToyImages = obj.Images?.Select(t => t.ImagePath).Take(1).ToArray()
             };
         }
 
@@ -29,7 +28,6 @@ namespace BuisnessLogic
                 Rate = obj.Rate,
                 Description = obj.Description,
                 Subject = (int)obj.Subject,
-                Images = obj.ToyImages?.Select(obj => new entities.DTO.Image { ImagePath = obj }).ToArray()
             };
         }
 

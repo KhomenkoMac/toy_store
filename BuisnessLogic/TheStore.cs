@@ -12,8 +12,8 @@ namespace BuisnessLogic
         private readonly IDataProviderService<entities.DTO.User> _usersDataProviderService;
 
         public TheStore(
-            IDataMutatorService<entities.DTO.Toy> toysDataMutatorService, 
-            IDataProviderService<entities.DTO.Toy> toysDataProviderService, 
+            IDataMutatorService<entities.DTO.Toy> toysDataMutatorService,
+            IDataProviderService<entities.DTO.Toy> toysDataProviderService,
             IDataProviderService<entities.DTO.User> usersDataProviderService)
         {
             _toysDataMutatorService = toysDataMutatorService;

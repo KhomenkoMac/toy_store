@@ -11,7 +11,6 @@ namespace BuisnessLogic
         public double Rate { get; set; }
         public string Description { get; set; }
         public Subject Subject { get; set; } // тематика
-        public ICollection<string> ToyImages { get; set; }
     }
 
 
