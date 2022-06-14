@@ -1,9 +1,10 @@
 ﻿using BuisnessLogic.Enums;
-using System;
+using BuisnessLogic.utils;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
+using wpf_ui.Commands;
+using wpf_ui.Mediators;
+using wpf_ui.Utils;
 
 namespace wpf_ui.ViewModels
 {
@@ -37,17 +38,19 @@ namespace wpf_ui.ViewModels
             }
         }
 
-        private IEnumerable<Subject> _subjects = Enum.GetValues(typeof(Subject)).Cast<Subject>();
-        public IEnumerable<Subject> Subjects
+        public IEnumerable<Subject> Subjects { get; }
+
+        private Subject _selectedSubject;
+        public Subject SelectedSubject
         {
-            get 
-            { 
-                return _subjects; 
+            get
+            {
+                return _selectedSubject;
             }
-            set 
-            { 
-                _subjects = value;
-                OnPropertyChanged(nameof(Subjects));
+            set
+            {
+                _selectedSubject = value;
+                OnPropertyChanged(nameof(SelectedSubject));
             }
         }
 
@@ -65,10 +68,13 @@ namespace wpf_ui.ViewModels
             }
         }
 
-        public CreateToyViewModel(ICommand addToStore, ICommand cancel)
+        public CreateToyViewModel(
+            ToysListMediator mediator, 
+            NavigationService<ToyListViewModel> navigateToTheViewService)
         {
-            AddToStore = addToStore;
-            Cancel = cancel;
+            AddToStore = new AddToyCommand(mediator, this, navigateToTheViewService);
+            Cancel = new NavigateCommand<ToyListViewModel>(navigateToTheViewService);
+            Subjects = EnumsFactory.CreateSubjectsEnumColleciton();
         }
 
 

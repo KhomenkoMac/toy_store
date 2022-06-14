@@ -11,6 +11,17 @@
         Height="450" 
         Width="800">
     <Grid>
-        <views:ToysListView />
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vm:CreateToyViewModel}">
+                <views:CreateToyView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ToyListViewModel}">
+                <views:ToysListView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ToyCartViewModel}">
+                <views:ToyCartView />
+            </DataTemplate>
+        </Grid.Resources>
+        <ContentControl Content="{Binding CurrentVM}"/>
     </Grid>
 </Window>

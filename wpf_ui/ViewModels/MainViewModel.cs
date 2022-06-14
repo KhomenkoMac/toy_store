@@ -1,19 +1,22 @@
-﻿namespace wpf_ui.ViewModels
+﻿using wpf_ui.Mediators;
+
+namespace wpf_ui.ViewModels
 {
-    public class MainViewModel: BaseViewModel
+    public class MainViewModel : BaseViewModel
     {
-        private BaseViewModel _currentPage;
-        public BaseViewModel CurrentPage
+        private readonly NavigationMediator _navigationMediator;
+
+        public MainViewModel(NavigationMediator navigationMediator)
         {
-            get
-            {
-                return _currentPage;
-            }
-            set
-            {
-                _currentPage = value;
-                OnPropertyChanged(nameof(CurrentPage));
-            }
+            _navigationMediator = navigationMediator;
+            _navigationMediator.CurrentVmChanged += VMChangedHandler;
         }
+
+        private void VMChangedHandler()
+        {
+            OnPropertyChanged(nameof(CurrentVM));
+        }
+
+        public BaseViewModel CurrentVM => _navigationMediator.CurrentVM;
     }
 }

@@ -1,11 +1,19 @@
 ﻿using BuisnessLogic.Enums;
+using BuisnessLogic.utils;
 using System.Collections.Generic;
-using wpf_ui.utils;
 
 namespace wpf_ui.ViewModels.Items
 {
     public class ToyViewModel : BaseViewModel
     {
+        private int _id;
+
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
         private string _name;
         public string Name
         {

@@ -1,10 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿using BuisnessLogic;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using wpf_ui.Commands;
+using wpf_ui.Mediators;
+using wpf_ui.Utils;
 using wpf_ui.ViewModels.Items;
 
 namespace wpf_ui.ViewModels
 {
+
     public class ToyListViewModel : BaseViewModel
     {
+        private readonly ToysListMediator _toysListMediator;
 
         private ToyViewModel _selectedToy;
         public ToyViewModel SelectedToy
@@ -20,41 +29,45 @@ namespace wpf_ui.ViewModels
             }
         }
 
-        public ObservableCollection<ToyViewModel> ToyList { get; }
-
-        public ToyListViewModel()
+        private ObservableCollection<ToyViewModel> _toyList = new();
+        public IEnumerable<ToyViewModel> ToyList => _toyList;
+        
+        public void UpdateToys(ICollection<Toy> toys)
         {
-            ToyList = new ObservableCollection<ToyViewModel>
+            foreach (var item in toys)
             {
-                new ToyViewModel
+                _toyList.Add(new ToyViewModel()
                 {
-                    Name = "Toy1Toy1Toy1Toy1Toy1Toy1Toy1Toy1Toy1Toy1Toy1",
-                    Description = "qwerty1",
-                    Price = 100.3,
-                    Subject = BuisnessLogic.Enums.Subject.anime
-                },
-                new ToyViewModel
-                {
-                    Name = "Toy1",
-                    Description = "qwerty1",
-                    Price = 100.3,
-                    Subject = BuisnessLogic.Enums.Subject.military
-                },
-                new ToyViewModel
-                {
-                    Name = "Toy1",
-                    Description = "qwerty1",
-                    Price = 100.3,
-                    Subject = BuisnessLogic.Enums.Subject.educational
-                },
-                new ToyViewModel
-                {
-                    Name = "Toy1",
-                    Description = "qwerty1",
-                    Price = 100.3,
-                    Subject = BuisnessLogic.Enums.Subject.horror
-                },
-            };
+                    Id = item.Id,
+                    Name = item.Name,
+                    Description = item.Description,
+                    Price = item.Price,
+                    Subject = item.Subject,
+                });
+            }
         }
+
+
+        public ToyListViewModel(
+            ToysListMediator toysListMediator, 
+            NavigationService<CreateToyViewModel> navigateToTheViewService)
+        {
+            _toysListMediator = toysListMediator;
+            LoadToys = new LoadToysCommand(toysListMediator, this);
+            AddToy = new NavigateCommand<CreateToyViewModel>(navigateToTheViewService);
+        }
+
+        public static ToyListViewModel CreateWithLoadedList(ToysListMediator toysListMediator, NavigationService<CreateToyViewModel> navigateToTheViewService)
+        {
+            var vm = new ToyListViewModel(toysListMediator, navigateToTheViewService);
+            vm.LoadToys.Execute(null);
+            return vm;
+        }
+
+        public ICommand AddToy { get; }
+        public ICommand UpdateToy { get; }
+        public ICommand DeleteToy { get; }
+        public ICommand AddToCart { get; }
+        public ICommand LoadToys { get; }
     }
 }

@@ -4,26 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:wpf_ui.Views"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
              Background="White">
-    <Grid>
-        <DockPanel LastChildFill="False" >
-            <Grid DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Toy Store" FontSize="30" />
-                <StackPanel Grid.Column="1">
-                    <Button FontSize="20"  Content="Add to Cart" />
-                    <Button FontSize="20" Content="Update Toy" />
-                    <Button FontSize="20" Content="Delete From Store" />
-                </StackPanel>
-            </Grid>
+    <!--<behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadToys}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>-->
+    <UserControl.Resources>
+        <Style x:Key="RoundedBtn" TargetType="Button">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="15"/>
+                </Style>
+            </Style.Resources>
+        </Style>
 
-            <ListBox DockPanel.Dock="Top" ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}">
+        <Style x:Key="OptionBtn" TargetType="Button" BasedOn="{StaticResource ResourceKey=RoundedBtn}">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="FontWeight" Value="DemiBold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <StackPanel DockPanel.Dock="Right" Margin="17 10" TextElement.FontSize="20" MinWidth="200">
+                    <Button Style="{StaticResource OptionBtn}" Content="Add to Cart" />
+                    <Button Style="{StaticResource OptionBtn}" Content="Add Toy" Command="{Binding AddToy}"/>
+                    <Button Style="{StaticResource OptionBtn}" Content="Update Toy" />
+                    <Button Style="{StaticResource OptionBtn}" Content="Delete From Store" />
+                </StackPanel>
+                <Label Content="Toy Store" VerticalAlignment="Center" Padding="30 0 0 0" FontSize="30" />
+            </DockPanel>
+            <ScrollViewer Grid.Row="1">
+                
+            <ListBox  ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}">
                 <ListBox.ItemTemplate>
                     
                     <DataTemplate>
@@ -37,10 +65,11 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            </ScrollViewer>
 
-            <StackPanel DockPanel.Dock="Top" TextElement.FontSize="20">
+            <StackPanel Grid.Row="2" TextElement.FontSize="20" Margin="17 20">
                 
-                <Grid >
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -77,6 +106,6 @@
                 </Grid>
             </StackPanel>
             
-        </DockPanel>
+        </Grid>
     </Grid>
 </UserControl>
