@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace entity_framework.DataServices
 {
+
     public class DataProviderService<T> : IDataProviderService<T> where T : DTO
     {
         private readonly IToyStoreContextCreator _toyStoreContextCreator;
