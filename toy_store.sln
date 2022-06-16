@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wpf_ui", "wpf_ui\wpf_ui.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "entities", "entities\entities.csproj", "{A3D40E5C-C9D7-4705-AA06-2890040955DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuisnessLogic", "BuisnessLogic\BuisnessLogic.csproj", "{CF640B36-FE0B-46E5-A19C-3D6B8028F2E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A3D40E5C-C9D7-4705-AA06-2890040955DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3D40E5C-C9D7-4705-AA06-2890040955DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3D40E5C-C9D7-4705-AA06-2890040955DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF640B36-FE0B-46E5-A19C-3D6B8028F2E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF640B36-FE0B-46E5-A19C-3D6B8028F2E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF640B36-FE0B-46E5-A19C-3D6B8028F2E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF640B36-FE0B-46E5-A19C-3D6B8028F2E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,14 +8,14 @@ namespace BuisnessLogic
 
     public class TheCart
     {
-        private readonly IDataProvider<entities.DTO.Toy> _toyDataProviderService;
-        private readonly IDataProvider<entities.DTO.User> _usersDataProviderService;
-        private readonly IDataMutator<entities.DTO.Profile> _profileDataMutatorService;
+        private readonly IDataProviderService<entities.DTO.Toy> _toyDataProviderService;
+        private readonly IDataProviderService<entities.DTO.User> _usersDataProviderService;
+        private readonly IDataMutatorService<entities.DTO.Profile> _profileDataMutatorService;
 
         public TheCart(
-            IDataProvider<entities.DTO.Toy> dataProviderService,
-            IDataProvider<entities.DTO.User> usersDataProviderService,
-            IDataMutator<entities.DTO.Profile> profileDataMutatorService)
+            IDataProviderService<entities.DTO.Toy> dataProviderService,
+            IDataProviderService<entities.DTO.User> usersDataProviderService,
+            IDataMutatorService<entities.DTO.Profile> profileDataMutatorService)
         {
             _toyDataProviderService = dataProviderService;
             _usersDataProviderService = usersDataProviderService;
@@ -39,15 +39,17 @@ namespace BuisnessLogic
 
         public ICollection<Toy> GetIncartToys(int userId)
         {
-            var user = _usersDataProviderService.ReadBy(userId);
-            return user.UserProfile.Toys.ToList().Select(obj => obj.FromDto()).ToList();
+            //var user = _usersDataProviderService.ReadBy(userId);
+            //return user.UserProfile.Toys.ToList().Select(obj => obj.FromDto()).ToList();
+            throw new NotImplementedException();
         }
 
         private Tuple<entities.DTO.Toy, entities.DTO.Profile> FindToyInTheCart(int userId, int toyId)
         {
-            var toyToAdd = _toyDataProviderService.ReadBy(toyId);
-            var user = _usersDataProviderService.ReadBy(userId);
-            return new(toyToAdd, user.UserProfile);
+            //var toyToAdd = _toyDataProviderService.ReadBy(toyId);
+            //var user = _usersDataProviderService.ReadBy(userId);
+            //return new(toyToAdd, user.UserProfile);
+            throw new NotImplementedException();
         }
 
     }

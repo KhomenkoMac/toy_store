@@ -49,7 +49,9 @@ namespace wpf_ui
 
                     //
                     services.AddSingleton<TheStore>();
+                    services.AddSingleton<TheAuthentication>();
                     //services.AddSingleton<TheCart>();
+                    services.AddSingleton<AuthorizationMediator>();
                     services.AddSingleton<NavigationMediator>();
                     services.AddSingleton<ToysListMediator>();
 
