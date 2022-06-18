@@ -1,6 +1,8 @@
 ﻿using BuisnessLogic.Enums;
 using BuisnessLogic.utils;
 using System.Collections.Generic;
+using System.Windows.Input;
+using wpf_ui.Commands;
 
 namespace wpf_ui.ViewModels.Items
 {
@@ -75,6 +77,9 @@ namespace wpf_ui.ViewModels.Items
         public ToyViewModel()
         {
             Subjects = EnumsFactory.CreateSubjectsEnumColleciton();
+            Click = new HelloCommand();
         }
+
+        public ICommand Click { get; set; }
     }
 }

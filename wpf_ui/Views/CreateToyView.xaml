@@ -11,7 +11,7 @@
         <StackPanel Width="400px" HorizontalAlignment="Center" >
             <StackPanel>
                 <Label Content="Name"/>
-                <TextBox Grid.Column="1" Text="{Binding Name}"/>
+                <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <Grid>
@@ -26,15 +26,15 @@
                 </Grid.RowDefinitions>
 
                 <Label Content="Price"/>
-                <TextBox Text="{Binding Price}" Grid.Row="1"/>
+                <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
 
                 <Label Content="Subject" Grid.Column="1"/>
-                <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}"/>
+                <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
             <StackPanel Grid.ColumnSpan="2">
                 <Label Content="Description"/>
-                <TextBox  Text="{Binding Description}"/>
+                <TextBox  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <Grid>

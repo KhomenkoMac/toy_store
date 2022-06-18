@@ -9,16 +9,13 @@ namespace BuisnessLogic
     {
         private readonly IDataMutatorService<entities.DTO.Toy> _toysDataMutatorService;
         private readonly IDataProviderService<entities.DTO.Toy> _toysDataProviderService;
-        private readonly IDataProviderService<entities.DTO.User> _usersDataProviderService;
 
         public TheStore(
             IDataMutatorService<entities.DTO.Toy> toysDataMutatorService,
-            IDataProviderService<entities.DTO.Toy> toysDataProviderService,
-            IDataProviderService<entities.DTO.User> usersDataProviderService)
+            IDataProviderService<entities.DTO.Toy> toysDataProviderService)
         {
             _toysDataMutatorService = toysDataMutatorService;
             _toysDataProviderService = toysDataProviderService;
-            _usersDataProviderService = usersDataProviderService;
         }
 
         public async Task<ICollection<Toy>> GetAllToys()
@@ -33,10 +30,11 @@ namespace BuisnessLogic
             return res.FromDto();
         }
 
-        public async Task AddToStore(Toy toy)
+        public async Task<Toy> AddToStore(Toy toy)
         {
             var dto_toy = toy.ToDto();
-            await _toysDataMutatorService.AddWithNetsted(dto_toy);
+            await _toysDataMutatorService.Insert(dto_toy);
+            return dto_toy.FromDto();
         }
 
         public async Task DeleteFromStore(int toy_id)
@@ -44,6 +42,10 @@ namespace BuisnessLogic
             await _toysDataMutatorService.Remove(toy_id);
         }
 
+        public async Task Update(Toy toy)
+        {
+            await _toysDataMutatorService.Update(toy.ToDto());
+        }
     }
 
 

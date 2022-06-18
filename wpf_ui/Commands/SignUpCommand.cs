@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using wpf_ui.Mediators;
 using wpf_ui.ViewModels;
 
@@ -21,9 +20,5 @@ namespace wpf_ui.Commands
             await _authorizationMediator.SignUp(_authorizationVM.Login, _authorizationVM.Password);
         }
 
-        public override bool CanExecute(object parameter)
-        {
-            return _authorizationMediator.CurrentUser == null && base.CanExecute(parameter);
-        }
     }
 }

@@ -21,6 +21,9 @@
             <DataTemplate DataType="{x:Type vm:ToyCartViewModel}">
                 <views:ToyCartView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AuthorizationViewModel}">
+                <views:AuthorizationView />
+            </DataTemplate>
         </Grid.Resources>
         <ContentControl Content="{Binding CurrentVM}"/>
     </Grid>

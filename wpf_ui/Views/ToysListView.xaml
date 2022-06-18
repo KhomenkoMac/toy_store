@@ -15,23 +15,7 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>-->
     <UserControl.Resources>
-        <Style x:Key="RoundedBtn" TargetType="Button">
-            <Style.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="15"/>
-                </Style>
-            </Style.Resources>
-        </Style>
-
-        <Style x:Key="OptionBtn" TargetType="Button" BasedOn="{StaticResource ResourceKey=RoundedBtn}">
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="FontWeight" Value="DemiBold"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        
     </UserControl.Resources>
     <Grid>
         <Grid>
@@ -42,17 +26,17 @@
             </Grid.RowDefinitions>
             <DockPanel Grid.Row="0">
                 <StackPanel DockPanel.Dock="Right" Margin="17 10" TextElement.FontSize="20" MinWidth="200">
-                    <Button Style="{StaticResource OptionBtn}" Content="Add to Cart" />
+                    <Button Style="{StaticResource OptionBtn}" Content="Add to Cart"  />
                     <Button Style="{StaticResource OptionBtn}" Content="Add Toy" Command="{Binding AddToy}"/>
-                    <Button Style="{StaticResource OptionBtn}" Content="Update Toy" />
-                    <Button Style="{StaticResource OptionBtn}" Content="Delete From Store" />
+                    <Button Style="{StaticResource OptionBtn}" Content="Update Toy" Command="{Binding UpdateToy}"/>
+                    <Button Style="{StaticResource OptionBtn}" Content="Delete From Store" Command="{Binding DeleteToy}"/>
                 </StackPanel>
                 <Label Content="Toy Store" VerticalAlignment="Center" Padding="30 0 0 0" FontSize="30" />
             </DockPanel>
             <ScrollViewer Grid.Row="1">
                 
             <ListBox  ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}">
-                <ListBox.ItemTemplate>
+                    <ListBox.ItemTemplate>
                     
                     <DataTemplate>
                         <Grid TextElement.FontSize="16">
@@ -61,6 +45,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Content="{Binding Name}"/>
+                                <Grid.InputBindings>
+                                    <MouseBinding Command="{Binding Click}" Gesture="LeftDoubleClick"/>
+                                </Grid.InputBindings>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

@@ -2,9 +2,11 @@
 {
     public class Profile
     {
+        public int ProfileId { get; }
         public User User { get; }
-        public Profile(User user)
+        public Profile(int profileId, User user)
         {
+            ProfileId = profileId;
             User = user;
         }
     }

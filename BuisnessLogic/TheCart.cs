@@ -2,54 +2,104 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BuisnessLogic
 {
-
     public class TheCart
     {
-        private readonly IDataProviderService<entities.DTO.Toy> _toyDataProviderService;
-        private readonly IDataProviderService<entities.DTO.User> _usersDataProviderService;
-        private readonly IDataMutatorService<entities.DTO.Profile> _profileDataMutatorService;
+        private readonly IDataProviderService<entities.DTO.Toy> _toyProvider;
+        private readonly IDataProviderService<entities.DTO.User> _usersProvider;
+        private readonly IDataProviderService<entities.DTO.Profile> _profileProvider;
+        private readonly IDataProviderService<entities.DTO.ProfileToy> _profileToyProvider;
+        private readonly IDataMutatorService<entities.DTO.ProfileToy> _profileToyDataMutator;
 
         public TheCart(
-            IDataProviderService<entities.DTO.Toy> dataProviderService,
-            IDataProviderService<entities.DTO.User> usersDataProviderService,
-            IDataMutatorService<entities.DTO.Profile> profileDataMutatorService)
+            IDataProviderService<entities.DTO.Toy> toyDataProviderService,
+            IDataProviderService<entities.DTO.Profile> profileDataProvider,
+            IDataProviderService<entities.DTO.ProfileToy> profileToyDataProvider,
+            IDataMutatorService<entities.DTO.ProfileToy> profileToyDataMutator, 
+            IDataProviderService<entities.DTO.User> usersProvider)
         {
-            _toyDataProviderService = dataProviderService;
-            _usersDataProviderService = usersDataProviderService;
-            _profileDataMutatorService = profileDataMutatorService;
+            _toyProvider = toyDataProviderService;
+            _profileProvider = profileDataProvider;
+            _profileToyProvider = profileToyDataProvider;
+            _profileToyDataMutator = profileToyDataMutator;
+            _usersProvider = usersProvider;
         }
 
-        public bool AddToCart(int userId, int toyId)
+        public async Task AddToCart(Profile profile, Toy toy)
         {
-            var res = FindToyInTheCart(userId, toyId);
-            res.Item2.Toys.Add(res.Item1);
-            _profileDataMutatorService.Update(res.Item2);
-            return true;
+            int toyId = toy.Id;
+            int userId = profile.User.Id;
+
+            var existingItems = await RetriveProfileAndToy(userId, toyId);
+            var foundToy = existingItems.Item1;
+            var foundProfile = existingItems.Item2;
+            if (foundToy == null || foundProfile == null)
+            {
+                return;
+            }
+
+            var profileToy = await _profileToyProvider.ReadAll();
+            bool toyAlreadyAdded = ToyIsInTheCart(foundToy, foundProfile, profileToy);
+
+            if (toyAlreadyAdded)
+            {
+                return;
+            }
+
+            await _profileToyDataMutator.Insert(new entities.DTO.ProfileToy
+            {
+                ProfileId = foundProfile.Id,
+                ToyId = foundToy.Id
+            });
+        }
+
+
+        public async Task DeleteFromCart(Profile profile, Toy toy)
+        {
+            int userId = profile.User.Id;
+            int toyId = toy.Id;
+
+            var existingItems = await RetriveProfileAndToy(userId, toyId);
+            var foundToy = existingItems.Item1;
+            var foundProfile = existingItems.Item2;
+            if (foundToy == null || foundProfile == null)
+            {
+                return;
+            }
+
+            var profileToy = await _profileToyProvider.ReadAll();
+            bool toyIsInTheCart = ToyIsInTheCart(foundToy, foundProfile, profileToy);
+        }
+
+        public async Task<ICollection<Toy>> GetIncartToys(Profile profile)
+        {
+            List<Toy> toys = new();
+
+            var relations = await _profileToyProvider.ReadAll();
+            var toyIds = relations.Where(obj => obj.ProfileId == profile.ProfileId).Select(obj=> obj.ToyId);
+
+            foreach (var id in toyIds)
+            {
+                var toyToAdd = await _toyProvider.ReadBy(id);
+                toys.Add(toyToAdd.FromDto());
+            }
+            return toys;
         }
         
-        public void DeleteFromCart(int userId, int toyId)
+        private static bool ToyIsInTheCart(entities.DTO.Toy foundToy, entities.DTO.Profile foundProfile, ICollection<entities.DTO.ProfileToy> profileToy)
         {
-            var res = FindToyInTheCart(userId, toyId);
-            res.Item2.Toys.Remove(res.Item1);
-            _profileDataMutatorService.Update(res.Item2);
+            return profileToy.Where(obj => obj.ToyId == foundToy.Id).Where(obj => obj.ProfileId == foundProfile.Id).Any();
         }
 
-        public ICollection<Toy> GetIncartToys(int userId)
+        private async Task<Tuple<entities.DTO.Toy, entities.DTO.Profile>> RetriveProfileAndToy(int profileId, int toyId)
         {
-            //var user = _usersDataProviderService.ReadBy(userId);
-            //return user.UserProfile.Toys.ToList().Select(obj => obj.FromDto()).ToList();
-            throw new NotImplementedException();
-        }
-
-        private Tuple<entities.DTO.Toy, entities.DTO.Profile> FindToyInTheCart(int userId, int toyId)
-        {
-            //var toyToAdd = _toyDataProviderService.ReadBy(toyId);
-            //var user = _usersDataProviderService.ReadBy(userId);
-            //return new(toyToAdd, user.UserProfile);
-            throw new NotImplementedException();
+            var foundToy = await _toyProvider.ReadBy(toyId);
+            var foundProfile = await _profileProvider.ReadBy(profileId);
+            
+            return new Tuple<entities.DTO.Toy, entities.DTO.Profile>(foundToy, foundProfile);
         }
 
     }

@@ -20,7 +20,9 @@ namespace entity_framework.Factory
 
         public ToyStoreDataContext CreateContext()
         {
-            var builder = new DbContextOptionsBuilder().UseSqlServer(_connectionString);
+            var builder = new DbContextOptionsBuilder().UseSqlServer(
+                "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=toystore_db;Integrated Security=True;",
+                o=> o.MigrationsAssembly("entity_framework"));
             return new ToyStoreDataContext(builder.Options);
         }
 

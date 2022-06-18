@@ -13,6 +13,6 @@ namespace entities.DTO
         public int Subject { get; set; }
         public ICollection<ProductComment> ProductComment { get; set; } // toy comment
         public ICollection<Image> Images { get; set; } // images of toy 
-        public ICollection<Profile> Profiles { get; set; }
+        public ICollection<ProfileToy> ProfileToys { get; set; }
     }
 }

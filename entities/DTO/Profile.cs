@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace entities.DTO
@@ -9,9 +10,9 @@ namespace entities.DTO
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public int ImageId { get; set; }
+        [DefaultValue(3003)]
+        public int ImageId { get; set; } = 3003;
         public Image Image { get; set; }
-
-        public ICollection<Toy> Toys { get; set; }
+        public ICollection<ProfileToy> ProfileToys { get; set; }
     }
 }

@@ -6,67 +6,81 @@
              xmlns:local="clr-namespace:wpf_ui.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
+    <UserControl.Resources>
+        
+    </UserControl.Resources>
     <Grid>
-        <DockPanel LastChildFill="False" >
-            <Grid DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Cart" FontSize="30" />
-                <Button Grid.Column="1" FontSize="20" Content="Equip" />
-            </Grid>
-            <ListView DockPanel.Dock="Top">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <StackPanel DockPanel.Dock="Right" Margin="17 10" TextElement.FontSize="20" MinWidth="200">
+                    <Button Style="{StaticResource OptionBtn}" Content="Delete From Cart" />
+                    <Button Style="{StaticResource OptionBtn}" Content="Equip" />
+                    <Button Style="{StaticResource OptionBtn}" Content="Back to Store" />
+                </StackPanel>
+                <Label Content="The Cart" VerticalAlignment="Center" Padding="30 0 0 0" FontSize="30" />
+            </DockPanel>
+            <ScrollViewer Grid.Row="1">
 
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Name">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center" Text="12"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                <ListBox  ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}">
+                    <ListBox.ItemTemplate>
 
-                        <GridViewColumn Header="Price">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center" Text="12"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        <DataTemplate>
+                            <Grid TextElement.FontSize="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{Binding Name}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
 
-                        <GridViewColumn Header="Rate">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center" Text="12"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+            <StackPanel Grid.Row="2" TextElement.FontSize="20" Margin="17 20">
 
-                        <GridViewColumn Header="Description">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center" Text="12"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label HorizontalContentAlignment="Center" Content="Product naming" />
+                    <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Name, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
 
-                        <GridViewColumn Header="Subject">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center" Text="12"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </DockPanel>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label HorizontalContentAlignment="Center" Content="Price" />
+                    <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Price, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label HorizontalContentAlignment="Center" Content="Description" />
+                    <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Description, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label HorizontalContentAlignment="Center" Content="Subject" />
+                    <ComboBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" ItemsSource="{Binding SelectedToy.Subjects}" SelectedItem="{Binding SelectedToy.Subject, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </UserControl>

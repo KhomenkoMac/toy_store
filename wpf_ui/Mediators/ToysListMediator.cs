@@ -14,6 +14,9 @@ namespace wpf_ui.Mediators
         private ICollection<Toy> _toys = new List<Toy>();
         public ICollection<Toy> Toys => _toys;
 
+        public event Action<ICollection<Toy>> ToyListChanged;
+        public event Action<int> ToyDeleted;
+
         public ToysListMediator(TheStore theStore)
         {
             _theStore = theStore;
@@ -34,9 +37,34 @@ namespace wpf_ui.Mediators
 
         public async Task Add(Toy toy)
         {
-            await _theStore.AddToStore(toy);
-            _toys.Add(toy);
+            var addedToy = await _theStore.AddToStore(toy);
+            _toys.Add(addedToy);
         }
 
+        public async Task Update(Toy toy)
+        {
+            await _theStore.Update(toy);
+            int index = _toys.ToList().FindIndex(obj => obj.Id == toy.Id);
+            var list = _toys.ToList();
+            list[index] = toy;
+            _toys = list;
+        }
+        public async Task Delete(Toy toy)
+        {
+            await _theStore.DeleteFromStore(toy.Id);
+            var found = _toys.FirstOrDefault(obj => obj.Id == toy.Id);
+            _toys.Remove(found);
+            ToyListBeenChanged();
+        }
+
+        private void ToyListBeenChanged()
+        {
+            ToyListChanged?.Invoke(_toys);
+        }
+
+        private void ToyBeenDeleted(int toyId)
+        {
+            ToyDeleted?.Invoke(toyId);
+        }
     }
 }

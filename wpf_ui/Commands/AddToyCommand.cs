@@ -21,6 +21,17 @@ namespace wpf_ui.Commands
             _mediator = mediator;
             _viewModel = viewModel;
             _toToyLisingNavigationService = toToyLisingNavigationService;
+            _viewModel.PropertyChanged += ViewModelPropChanged;
+        }
+
+        private void ViewModelPropChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CreateToyViewModel.Name) || 
+                e.PropertyName == nameof(CreateToyViewModel.Price) ||
+                e.PropertyName == nameof(CreateToyViewModel.Description))
+            {
+                OnCanExecuteChanged();
+            }
         }
 
         public override async Task ExecuteAsync(object parameter)
@@ -46,31 +57,13 @@ namespace wpf_ui.Commands
             }
 
         }
+
+        public override bool CanExecute(object parameter)
+        {
+            return !string.IsNullOrWhiteSpace(_viewModel.Name) &&
+                    _viewModel.Price > 0 &&
+                    !string.IsNullOrWhiteSpace(_viewModel.Description) &&
+                    base.CanExecute(parameter);
+        }
     }
-
-    //public class LoadToysCommand : AsyncCommandBase
-    //{
-    //    private ObservableCollection<ToyViewModel> _toyViewModels;
-
-    //    public TheStore theStore { get; set; }
-
-    //    public LoadToysCommand(ObservableCollection<ToyViewModel> toyViewModels)
-    //    {
-    //        _theStore = theStore;
-    //        _toyViewModels = toyViewModels;
-    //    }
-    //    public override async Task ExcecuteAsync(object parameter)
-    //    {
-    //        _toyViewModels.Clear();
-    //        var toysFromBase = await _theStore.GetAllToys();
-    //        _toyViewModels = new ObservableCollection<ToyViewModel>(toysFromBase.Select(tfb => new ToyViewModel()
-    //        {
-    //            Id = tfb.Id,
-    //            Name = tfb.Name,
-    //            Description = tfb.Description,
-    //            Price = tfb.Price,
-    //            Subject = tfb.Subject,
-    //        }));
-    //    }
-    //}
 }

@@ -9,7 +9,7 @@ namespace wpf_ui.Commands
     {
         private readonly ToysListMediator _mediator;
         private readonly ToyListViewModel _viewModel;
-        public LoadToysCommand(ToysListMediator mediator, ToyListViewModel viewModel)
+        public LoadToysCommand(ToyListViewModel viewModel, ToysListMediator mediator)
         {
             _mediator = mediator;
             _viewModel = viewModel;

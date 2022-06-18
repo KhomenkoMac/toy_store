@@ -35,6 +35,7 @@ namespace wpf_ui
                     // data providers & mutator
                     services.AddSingleton<IDataProviderService<entities.DTO.Toy>, DataProviderService<entities.DTO.Toy>>();
                     services.AddSingleton<IDataProviderService<entities.DTO.User>, DataProviderService<entities.DTO.User>>();
+                    services.AddSingleton<IDataProviderService<entities.DTO.Profile>, DataProviderService<entities.DTO.Profile>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.User>, DataMutatorService<entities.DTO.User>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.Toy>, DataMutatorService<entities.DTO.Toy>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.Profile>, DataMutatorService<entities.DTO.Profile>>();
@@ -63,6 +64,10 @@ namespace wpf_ui
                                                                                      s.GetRequiredService<NavigationService<CreateToyViewModel>>()));
                     services.AddSingleton<Func<ToyListViewModel>>(s => () => s.GetRequiredService<ToyListViewModel>());
                     services.AddSingleton<NavigationService<ToyListViewModel>>();
+
+                    services.AddTransient<AuthorizationViewModel>();
+                    services.AddSingleton<Func<AuthorizationViewModel>>(s => () => s.GetRequiredService<AuthorizationViewModel>());
+                    services.AddSingleton<NavigationService<AuthorizationViewModel>>();
 
                     services.AddSingleton<ToyCartViewModel>();
 

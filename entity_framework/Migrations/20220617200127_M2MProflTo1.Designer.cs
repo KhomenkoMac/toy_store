@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using entity_framework;
 
 namespace entity_framework.Migrations
 {
     [DbContext(typeof(ToyStoreDataContext))]
-    partial class ToyStoreDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220617200127_M2MProflTo1")]
+    partial class M2MProflTo1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +94,8 @@ namespace entity_framework.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -205,8 +208,8 @@ namespace entity_framework.Migrations
             modelBuilder.Entity("entities.DTO.Profile", b =>
                 {
                     b.HasOne("entities.DTO.Image", "Image")
-                        .WithMany("Profile")
-                        .HasForeignKey("ImageId")
+                        .WithOne("Profile")
+                        .HasForeignKey("entities.DTO.Profile", "ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

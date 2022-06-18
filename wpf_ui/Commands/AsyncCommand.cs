@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace wpf_ui.Commands
 {
@@ -29,8 +31,10 @@ namespace wpf_ui.Commands
             {
                 await ExecuteAsync(parameter);
             }
-            catch (System.Exception)
+            catch (System.Exception err)
             {
+                MessageBox.Show(err.Message);
+                Debug.WriteLine(err.Message);
             }
             finally
             {

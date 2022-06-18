@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using wpf_ui.Mediators;
 using wpf_ui.Utils;
@@ -29,12 +28,8 @@ namespace wpf_ui.Commands
             if (_authorizationMediator.CurrentUser != null)
             {
                 _navigateCommand.Execute(null);
+                Debug.WriteLine("Signed in!!!", "Sign In");
             }
-        }
-
-        public override bool CanExecute(object parameter)
-        {
-            return _authorizationMediator.CurrentUser != null && base.CanExecute(parameter);
         }
     }
 }

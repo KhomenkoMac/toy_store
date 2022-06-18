@@ -11,5 +11,6 @@ namespace entity_framework
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Toy> Toys { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ProfileToy> ProfileToy { get; set; }
     }
 }

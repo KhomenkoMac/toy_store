@@ -1,4 +1,5 @@
 ﻿using BuisnessLogic;
+using System;
 using System.Threading.Tasks;
 using wpf_ui.Utils;
 using wpf_ui.ViewModels;
@@ -13,6 +14,7 @@ namespace wpf_ui.Mediators
         private Profile _currentUser;
         public Profile CurrentUser => _currentUser;
 
+
         public AuthorizationMediator(
             NavigationService<ToyListViewModel> toViewNavigationService, 
             TheAuthentication theAuthentication)
@@ -23,8 +25,11 @@ namespace wpf_ui.Mediators
 
         public async Task SignIn(string login, string password)
         {
-            var signedInUser = await _theAuthentication.SignIn(new User() { Login = login, Password = password });
-            _currentUser = new Profile(signedInUser) ?? null;
+            var profileOfUser = await _theAuthentication.SignIn(new User() { Login = login, Password = password });
+            if (profileOfUser != null)
+            {
+                _currentUser = new Profile(profileOfUser.Id, profileOfUser.User.FromDto());
+            }
         }
 
         public async Task SignUp(string login, string password)
@@ -34,6 +39,7 @@ namespace wpf_ui.Mediators
                 Login = login,
                 Password = password
             });
+
         }
     }
 }

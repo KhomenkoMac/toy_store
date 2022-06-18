@@ -8,7 +8,7 @@ namespace entities.DTO
     {
         public string ImagePath { get; set; }
 
-        public Profile Profile { get; set; }
+        public ICollection<Profile> Profile { get; set; }
         public ICollection<Toy> Toys { get; set; }
     }
 }
