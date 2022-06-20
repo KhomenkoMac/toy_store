@@ -9,13 +9,15 @@ namespace wpf_ui.Commands
     public class DeleteToyCommand : AsyncCommand
     {
         private readonly ToysListMediator _mediator;
+        private readonly CartMediator _cartMediator;
         private readonly ToyListViewModel _viewModel;
 
-        public DeleteToyCommand(ToyListViewModel viewModel, ToysListMediator mediator)
+        public DeleteToyCommand(ToyListViewModel viewModel, ToysListMediator mediator, CartMediator cartMediator)
         {
             _viewModel = viewModel;
             _mediator = mediator;
             _viewModel.PropertyChanged += OnViewModelPropChanged;
+            _cartMediator = cartMediator;
         }
 
         private void OnViewModelPropChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -37,6 +39,7 @@ namespace wpf_ui.Commands
                 Price = _viewModel.SelectedToy.Price,
                 Subject = _viewModel.SelectedToy.Subject
             });
+            _cartMediator.InCartToys.Remove(_viewModel.SelectedToy.Id);
             _viewModel.DeleteSelectedToy();
         }
 
