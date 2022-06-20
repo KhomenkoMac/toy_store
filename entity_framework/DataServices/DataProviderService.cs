@@ -32,7 +32,7 @@ namespace entity_framework.DataServices
         {
             using (var context = _toyStoreContextCreator.CreateContext())
             {
-                var entity = await context.Set<T>().FirstAsync();
+                var entity = await context.Set<T>().FirstAsync(obj=> obj.Id == id);
                 LoadAllPropsForEntity(context, entity);
                 return entity;
             }

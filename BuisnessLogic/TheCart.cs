@@ -31,11 +31,11 @@ namespace BuisnessLogic
         public async Task AddToCart(Profile profile, Toy toy)
         {
             int toyId = toy.Id;
-            int userId = profile.User.Id;
+            int profId = profile.ProfileId;
 
-            var existingItems = await RetriveProfileAndToy(userId, toyId);
-            var foundToy = existingItems.Item1;
-            var foundProfile = existingItems.Item2;
+            var foundToy = await _toyProvider.ReadBy(toyId);
+            var foundProfile = await _profileProvider.ReadBy(profId);
+
             if (foundToy == null || foundProfile == null)
             {
                 return;
@@ -59,10 +59,10 @@ namespace BuisnessLogic
 
         public async Task DeleteFromCart(Profile profile, Toy toy)
         {
-            int userId = profile.User.Id;
+            int profId = profile.ProfileId;
             int toyId = toy.Id;
 
-            var existingItems = await RetriveProfileAndToy(userId, toyId);
+            var existingItems = await RetriveProfileAndToy(profId, toyId);
             var foundToy = existingItems.Item1;
             var foundProfile = existingItems.Item2;
             if (foundToy == null || foundProfile == null)
@@ -71,7 +71,13 @@ namespace BuisnessLogic
             }
 
             var profileToy = await _profileToyProvider.ReadAll();
-            bool toyIsInTheCart = ToyIsInTheCart(foundToy, foundProfile, profileToy);
+            
+            if (!ToyIsInTheCart(foundToy, foundProfile, profileToy))
+            {
+                return;
+            }
+
+            await _profileToyDataMutator.Remove(GetTheRelation(foundToy, foundProfile, profileToy).Id);
         }
 
         public async Task<ICollection<Toy>> GetIncartToys(Profile profile)
@@ -91,7 +97,12 @@ namespace BuisnessLogic
         
         private static bool ToyIsInTheCart(entities.DTO.Toy foundToy, entities.DTO.Profile foundProfile, ICollection<entities.DTO.ProfileToy> profileToy)
         {
-            return profileToy.Where(obj => obj.ToyId == foundToy.Id).Where(obj => obj.ProfileId == foundProfile.Id).Any();
+            return GetTheRelation(foundToy, foundProfile, profileToy) is not null;
+        }
+
+        private static entities.DTO.ProfileToy GetTheRelation(entities.DTO.Toy foundToy, entities.DTO.Profile foundProfile, ICollection<entities.DTO.ProfileToy> profileToy)
+        {
+            return profileToy.Where(obj => obj.ToyId == foundToy.Id).Where(obj => obj.ProfileId == foundProfile.Id).FirstOrDefault();
         }
 
         private async Task<Tuple<entities.DTO.Toy, entities.DTO.Profile>> RetriveProfileAndToy(int profileId, int toyId)
