@@ -9,12 +9,14 @@ namespace wpf_ui.Commands
     {
         private readonly ToyListViewModel _toyListVM;
         private readonly ToysListMediator _mediator;
+        private readonly CartMediator _cartMediator;
 
-        public UpdateToyCommand(ToyListViewModel toyListVM, ToysListMediator mediator)
+        public UpdateToyCommand(ToyListViewModel toyListVM, ToysListMediator mediator, CartMediator cartMediator)
         {
             _toyListVM = toyListVM;
             _mediator = mediator;
             toyListVM.PropertyChanged += ToyListVMPropChanged;
+            _cartMediator = cartMediator;
         }
 
         private void ToyListVMPropChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -27,14 +29,19 @@ namespace wpf_ui.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
-            await _mediator.Update(new BuisnessLogic.Toy
+            var newOne = new BuisnessLogic.Toy
             {
                 Id = _toyListVM.SelectedToy.Id,
                 Name = _toyListVM.SelectedToy.Name,
                 Description = _toyListVM.SelectedToy.Description,
                 Price = _toyListVM.SelectedToy.Price,
                 Subject = _toyListVM.SelectedToy.Subject
-            });
+            };
+
+            await _mediator.Update(newOne);
+            _cartMediator.InCartToys.Remove(newOne.Id);
+            _cartMediator.InCartToys.Add(newOne.Id, newOne);
+
         }
 
         public override bool CanExecute(object parameter)

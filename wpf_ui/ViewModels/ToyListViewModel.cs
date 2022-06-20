@@ -66,7 +66,7 @@ namespace wpf_ui.ViewModels
             LoadToys = new LoadToysCommand(this, toysListMediator);
             LoadCart = new LoadInCartToysCommand(cartMediator);
             AddToy = new NavigateCommand<CreateToyViewModel>(navigateToTheViewService);
-            UpdateToy = new UpdateToyCommand(this, toysListMediator);
+            UpdateToy = new UpdateToyCommand(this, toysListMediator, cartMediator);
             DeleteToy = new DeleteToyCommand(this, toysListMediator, cartMediator);
             AddToCart = new AddToCartCommand(this, cartMediator);
             ShowCart = new NavigateCommand<ToyCartViewModel>(toyCartViewModel);
