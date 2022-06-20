@@ -11,7 +11,7 @@
         <materialDesign:ColorZone DockPanel.Dock="Top" Mode="Inverted" Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth3" ClipToBounds="True">
             <DockPanel>
                 
-                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" DockPanel.Dock="Right" Command="{Binding BackToStore}">
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" DockPanel.Dock="Left" Command="{Binding BackToStore}">
                     <materialDesign:PackIcon HorizontalAlignment="Right"
                         ToolTip="Back to store"
                         Kind="ExitToApp"
