@@ -5,82 +5,66 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:wpf_ui.Views"
              mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
-    <UserControl.Resources>
-        
-    </UserControl.Resources>
-    <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition />
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0">
-                <StackPanel DockPanel.Dock="Right" Margin="17 10" TextElement.FontSize="20" MinWidth="200">
-                    <Button Style="{StaticResource OptionBtn}" Content="Delete From Cart" />
-                    <Button Style="{StaticResource OptionBtn}" Content="Equip" />
-                    <Button Style="{StaticResource OptionBtn}" Content="Back to Store" />
-                </StackPanel>
-                <Label Content="The Cart" VerticalAlignment="Center" Padding="30 0 0 0" FontSize="30" />
+    <DockPanel>
+        <materialDesign:ColorZone DockPanel.Dock="Top" Mode="Inverted" Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth3" ClipToBounds="True">
+            <DockPanel>
+                
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" DockPanel.Dock="Right" Command="{Binding BackToStore}">
+                    <materialDesign:PackIcon HorizontalAlignment="Right"
+                        ToolTip="Back to store"
+                        Kind="ExitToApp"
+                        Height="25"
+                        Width="25" />
+                </Button>
+                <TextBlock Style="{StaticResource MaterialDesignHeadline4TextBlock}" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="16 0" Text="Toy Store" />
             </DockPanel>
-            <ScrollViewer Grid.Row="1">
+        </materialDesign:ColorZone>
+        <Grid Margin="60 50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <DockPanel Margin="0 0 25 0">
+                <Button Margin="0 5 0 0" DockPanel.Dock="Bottom" Content="Delete from cart" Command="{Binding DeleteFromCart}" materialDesign:ButtonAssist.CornerRadius="10"/>
+                <ListView ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}" IsManipulationEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Code" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Subject}" Header="Subject" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
-                <ListBox  ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}">
-                    <ListBox.ItemTemplate>
+            </DockPanel>
+            <DockPanel Grid.Row="1" Grid.Column="1" TextElement.FontSize="20">
+                <TextBox DockPanel.Dock="Top" materialDesign:HintAssist.Hint="Name" Margin="0 20 0 0"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         VerticalAlignment="Center" 
+                         Text="{Binding SelectedToy.Name, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <DataTemplate>
-                            <Grid TextElement.FontSize="16">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Content="{Binding Name}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </ScrollViewer>
+                <TextBox DockPanel.Dock="Top" materialDesign:HintAssist.Hint="Price" Margin="0 20 0 0"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         VerticalAlignment="Center" 
+                         Text="{Binding SelectedToy.Price, UpdateSourceTrigger=PropertyChanged}" />
 
-            <StackPanel Grid.Row="2" TextElement.FontSize="20" Margin="17 20">
+                <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding SelectedToy.Subjects}" Margin="0 20 0 0"
+                          SelectedItem="{Binding SelectedToy.Subject, UpdateSourceTrigger=PropertyChanged}"  
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                          materialDesign:HintAssist.Hint="Subject" />
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Product naming" />
-                    <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Name, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Price" />
-                    <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Price, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Description" />
-                    <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Description, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Subject" />
-                    <ComboBox IsReadOnly="True" VerticalContentAlignment="Center" Grid.Column="1" ItemsSource="{Binding SelectedToy.Subjects}" SelectedItem="{Binding SelectedToy.Subject, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-            </StackPanel>
-
+                <TextBox 
+                            DockPanel.Dock="Top"
+                            Text="{Binding SelectedToy.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto"
+                            materialDesign:HintAssist.Hint="Description"
+                            IsEnabled="True" />
+            </DockPanel>
         </Grid>
-    </Grid>
+    </DockPanel>
 </UserControl>

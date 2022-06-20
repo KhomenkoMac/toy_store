@@ -5,94 +5,94 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:wpf_ui.Views"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:vm="clr-namespace:wpf_ui.ViewModels.Items"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
              Background="White">
-    <!--<behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Loaded">
-            <behaviors:InvokeCommandAction Command="{Binding LoadToys}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>-->
-    <UserControl.Resources>
-        
-    </UserControl.Resources>
-    <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition />
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0">
-                <StackPanel DockPanel.Dock="Right" Margin="17 10" TextElement.FontSize="20" MinWidth="200">
-                    <Button Style="{StaticResource OptionBtn}" Content="Add to Cart"  />
-                    <Button Style="{StaticResource OptionBtn}" Content="Add Toy" Command="{Binding AddToy}"/>
-                    <Button Style="{StaticResource OptionBtn}" Content="Update Toy" Command="{Binding UpdateToy}"/>
-                    <Button Style="{StaticResource OptionBtn}" Content="Delete From Store" Command="{Binding DeleteToy}"/>
+    <DockPanel>
+        <materialDesign:ColorZone DockPanel.Dock="Top" Mode="Inverted" Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth3" ClipToBounds="True">
+              <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" >
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding AddToy}" materialDesign:ShadowAssist.ShadowEdges="None"  >
+                        <materialDesign:PackIcon HorizontalAlignment="Right"
+                        ToolTip="Add toy to store"
+                        Kind="BankAdd"
+                        Height="25"
+                        Width="25" />
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}" Command="{Binding ShowCart}" materialDesign:ShadowAssist.ShadowEdges="None" >
+                        <materialDesign:PackIcon HorizontalAlignment="Right"
+                        ToolTip="The Cart"
+                        Kind="Cart"
+                        Height="25"
+                        Width="25"/>
+                    </Button>
                 </StackPanel>
-                <Label Content="Toy Store" VerticalAlignment="Center" Padding="30 0 0 0" FontSize="30" />
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" DockPanel.Dock="Right" Click="Button_Click">
+                    <materialDesign:PackIcon HorizontalAlignment="Right"
+                        ToolTip="Exit"
+                        Kind="ExitToApp"
+                        Height="25"
+                        Width="25" />
+                </Button>
+                <TextBlock Style="{StaticResource MaterialDesignHeadline4TextBlock}" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="16 0" Text="Toy Store" />
             </DockPanel>
-            <ScrollViewer Grid.Row="1">
-                
-            <ListBox  ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}">
-                    <ListBox.ItemTemplate>
-                    
-                    <DataTemplate>
-                        <Grid TextElement.FontSize="16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="{Binding Name}"/>
-                                <Grid.InputBindings>
-                                    <MouseBinding Command="{Binding Click}" Gesture="LeftDoubleClick"/>
-                                </Grid.InputBindings>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            </ScrollViewer>
+        </materialDesign:ColorZone>
+        <Grid Margin="60 50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" /> 
+                <ColumnDefinition /> 
+            </Grid.ColumnDefinitions>
+            <DockPanel Margin="0 0 25 0">
+                <Button Margin="0 5 0 0" DockPanel.Dock="Bottom" Content="Update Toy" Command="{Binding UpdateToy}" materialDesign:ButtonAssist.CornerRadius="10"/>
+                <Button Margin="0 5 0 0" DockPanel.Dock="Bottom" Content="Delete From Store" Command="{Binding DeleteToy}" materialDesign:ButtonAssist.CornerRadius="10"/>
+                <ListView ItemsSource="{Binding ToyList}" SelectedItem="{Binding SelectedToy}" IsManipulationEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Code" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Subject}" Header="Subject" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
-            <StackPanel Grid.Row="2" TextElement.FontSize="20" Margin="17 20">
-                
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Product naming" />
-                    <TextBox VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Name, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-                
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Price" />
-                    <TextBox VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Price, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-                
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Description" />
-                    <TextBox VerticalContentAlignment="Center" Grid.Column="1" Text="{Binding SelectedToy.Description, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+            </DockPanel>
+            <DockPanel Grid.Row="1" Grid.Column="1" TextElement.FontSize="20">
+                <Button DockPanel.Dock="Top" Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                        Command="{Binding AddToCart}" materialDesign:ShadowAssist.ShadowEdges="None"  >
+                    <materialDesign:PackIcon HorizontalAlignment="Right"
+                        ToolTip="Add toy to store"
+                        Kind="CartAdd"
+                        Height="25"
+                        Width="25" />
+                </Button>
+                <TextBox DockPanel.Dock="Top" materialDesign:HintAssist.Hint="Name" Margin="0 20 0 0"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         VerticalAlignment="Center" 
+                         Text="{Binding SelectedToy.Name, UpdateSourceTrigger=PropertyChanged}" />
 
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Label HorizontalContentAlignment="Center" Content="Subject" />
-                    <ComboBox VerticalContentAlignment="Center" Grid.Column="1" ItemsSource="{Binding SelectedToy.Subjects}" SelectedItem="{Binding SelectedToy.Subject, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-            </StackPanel>
-            
+                <TextBox DockPanel.Dock="Top" materialDesign:HintAssist.Hint="Price" Margin="0 20 0 0"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         VerticalAlignment="Center" 
+                         Text="{Binding SelectedToy.Price, UpdateSourceTrigger=PropertyChanged}" />
+
+                <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding SelectedToy.Subjects}" Margin="0 20 0 0"
+                          SelectedItem="{Binding SelectedToy.Subject, UpdateSourceTrigger=PropertyChanged}"  
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+                          materialDesign:HintAssist.Hint="Subject" />
+
+                <TextBox 
+                            DockPanel.Dock="Top"
+                            Text="{Binding SelectedToy.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto"
+                            materialDesign:HintAssist.Hint="Description"
+                            IsEnabled="True" />
+            </DockPanel>
         </Grid>
-    </Grid>
+    </DockPanel>
 </UserControl>

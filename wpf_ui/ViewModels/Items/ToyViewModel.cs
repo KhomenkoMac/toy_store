@@ -9,7 +9,6 @@ namespace wpf_ui.ViewModels.Items
     public class ToyViewModel : BaseViewModel
     {
         private int _id;
-
         public int Id
         {
             get { return _id; }
@@ -79,6 +78,17 @@ namespace wpf_ui.ViewModels.Items
             Subjects = EnumsFactory.CreateSubjectsEnumColleciton();
             Click = new HelloCommand();
         }
+
+        //public ToyViewModel(int id, string name, double price, string description, Subject subj, bool addedToCart)
+        //{
+        //    _id = id;
+        //    _name = name;
+        //    _price = price;
+        //    _description = description;
+        //    _subj = subj;
+        //    _addedToCart = addedToCart;
+        //    this();
+        //}
 
         public ICommand Click { get; set; }
     }

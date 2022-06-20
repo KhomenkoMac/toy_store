@@ -37,6 +37,7 @@ namespace wpf_ui.Commands
                 Price = _viewModel.SelectedToy.Price,
                 Subject = _viewModel.SelectedToy.Subject
             });
+            _viewModel.DeleteSelectedToy();
         }
 
         public override bool CanExecute(object parameter)

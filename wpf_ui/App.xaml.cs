@@ -36,9 +36,11 @@ namespace wpf_ui
                     services.AddSingleton<IDataProviderService<entities.DTO.Toy>, DataProviderService<entities.DTO.Toy>>();
                     services.AddSingleton<IDataProviderService<entities.DTO.User>, DataProviderService<entities.DTO.User>>();
                     services.AddSingleton<IDataProviderService<entities.DTO.Profile>, DataProviderService<entities.DTO.Profile>>();
+                    services.AddSingleton<IDataProviderService<entities.DTO.ProfileToy>, DataProviderService<entities.DTO.ProfileToy>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.User>, DataMutatorService<entities.DTO.User>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.Toy>, DataMutatorService<entities.DTO.Toy>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.Profile>, DataMutatorService<entities.DTO.Profile>>();
+                    services.AddSingleton<IDataMutatorService<entities.DTO.ProfileToy>, DataMutatorService<entities.DTO.ProfileToy>>();
 
                     // data providers & mutator adapters
                     //services.AddSingleton<IDataProvider<entities.DTO.Toy>, DataProviderServiceAdapter<entities.DTO.Toy>>();
@@ -51,17 +53,21 @@ namespace wpf_ui
                     //
                     services.AddSingleton<TheStore>();
                     services.AddSingleton<TheAuthentication>();
-                    //services.AddSingleton<TheCart>();
+                    services.AddSingleton<TheCart>();
                     services.AddSingleton<AuthorizationMediator>();
                     services.AddSingleton<NavigationMediator>();
                     services.AddSingleton<ToysListMediator>();
+                    services.AddSingleton<CartMediator>();
 
                     services.AddTransient<CreateToyViewModel>();
                     services.AddSingleton<Func<CreateToyViewModel>>(s => () => s.GetRequiredService<CreateToyViewModel>());
                     services.AddSingleton<NavigationService<CreateToyViewModel>>();
 
-                    services.AddTransient(s => ToyListViewModel.CreateWithLoadedList(s.GetRequiredService<ToysListMediator>(), 
-                                                                                     s.GetRequiredService<NavigationService<CreateToyViewModel>>()));
+                    services.AddTransient(s => ToyListViewModel.CreateWithLoadedListAndCart(s.GetRequiredService<CartMediator>(), 
+                                                                                     s.GetRequiredService<ToysListMediator>(), 
+                                                                                     s.GetRequiredService<NavigationService<CreateToyViewModel>>(),
+                                                                                     s.GetRequiredService<NavigationService<ToyCartViewModel>>()
+                                                                                     ));
                     services.AddSingleton<Func<ToyListViewModel>>(s => () => s.GetRequiredService<ToyListViewModel>());
                     services.AddSingleton<NavigationService<ToyListViewModel>>();
 
@@ -69,7 +75,11 @@ namespace wpf_ui
                     services.AddSingleton<Func<AuthorizationViewModel>>(s => () => s.GetRequiredService<AuthorizationViewModel>());
                     services.AddSingleton<NavigationService<AuthorizationViewModel>>();
 
-                    services.AddSingleton<ToyCartViewModel>();
+                    services.AddTransient(s => ToyCartViewModel.CreateWithLoadedList(s.GetRequiredService<CartMediator>(), 
+                                                                                                       s.GetRequiredService<NavigationService<ToyListViewModel>>()
+                                                                                                       ));
+                    services.AddSingleton<Func<ToyCartViewModel>>(s => () => s.GetRequiredService<ToyCartViewModel>());
+                    services.AddSingleton<NavigationService<ToyCartViewModel>>();
 
                     services.AddSingleton<MainViewModel>();
 
@@ -88,7 +98,7 @@ namespace wpf_ui
                 context.Database.Migrate();
             }
 
-            var navService = _host.Services.GetRequiredService<NavigationService<ToyListViewModel>>();
+            var navService = _host.Services.GetRequiredService<NavigationService<AuthorizationViewModel>>();
             navService.Navigate();
 
             var mainWin = new MainWindow

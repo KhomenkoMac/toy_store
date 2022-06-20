@@ -1,30 +1,22 @@
 ﻿using BuisnessLogic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using wpf_ui.Mediators;
-using wpf_ui.ViewModels;
 
 namespace wpf_ui.Commands
 {
     public class LoadInCartToysCommand : AsyncCommand
     {
-        private readonly ToysListMediator _toysListMediator;
-        private readonly ToyCartViewModel _toyCartVM;
+        private readonly CartMediator _mediator;
 
-        public LoadInCartToysCommand(
-            ToyCartViewModel toyCartVM, 
-            ToysListMediator toysListMediator)
+        public LoadInCartToysCommand(CartMediator mediator)
         {
-            _toyCartVM = toyCartVM;
-            _toysListMediator = toysListMediator;
+            _mediator = mediator;
         }
 
-        public override Task ExecuteAsync(object parameter)
+        public async override Task ExecuteAsync(object parameter)
         {
-            throw new NotImplementedException();
+            await _mediator.Load();
         }
     }
 }

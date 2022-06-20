@@ -10,16 +10,15 @@ namespace wpf_ui.Mediators
     {
         private readonly TheStore _theStore;
         private readonly Lazy<Task> _initializeLazy;
-        
+        private readonly CartMediator _cartMediator;
+
         private ICollection<Toy> _toys = new List<Toy>();
         public ICollection<Toy> Toys => _toys;
 
-        public event Action<ICollection<Toy>> ToyListChanged;
-        public event Action<int> ToyDeleted;
-
-        public ToysListMediator(TheStore theStore)
+        public ToysListMediator(TheStore theStore, CartMediator cartMediator)
         {
             _theStore = theStore;
+            _cartMediator = cartMediator;
             _initializeLazy = new Lazy<Task>(InitToys);
         }
 
@@ -54,17 +53,6 @@ namespace wpf_ui.Mediators
             await _theStore.DeleteFromStore(toy.Id);
             var found = _toys.FirstOrDefault(obj => obj.Id == toy.Id);
             _toys.Remove(found);
-            ToyListBeenChanged();
-        }
-
-        private void ToyListBeenChanged()
-        {
-            ToyListChanged?.Invoke(_toys);
-        }
-
-        private void ToyBeenDeleted(int toyId)
-        {
-            ToyDeleted?.Invoke(toyId);
         }
     }
 }

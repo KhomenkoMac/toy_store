@@ -1,6 +1,7 @@
 ﻿using BuisnessLogic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using wpf_ui.Commands;
 using wpf_ui.Mediators;
@@ -12,13 +13,15 @@ namespace wpf_ui.ViewModels
     public class ToyCartViewModel : BaseViewModel
     {
         private readonly NavigationService<ToyListViewModel> _navigateToViewService;
+        private readonly CartMediator _cartMediator;
 
-        public ToyCartViewModel(
-            ToysListMediator toysListMediator, 
-            NavigationService<ToyListViewModel> navigateToViewService)
+        public ToyCartViewModel(CartMediator cartMediator, NavigationService<ToyListViewModel> navigateToViewService)
         {
             _navigateToViewService = navigateToViewService;
-            LoadInCartToys = new LoadInCartToysCommand(this, toysListMediator);
+            _cartMediator = cartMediator;
+            LoadInCartToys = new LoadInCartToysCommand(cartMediator);
+            DeleteFromCart = new DeleteFromCartCommand(this, cartMediator);
+            BackToStore = new NavigateCommand<ToyListViewModel>(navigateToViewService);
         }
 
         private ToyViewModel _selectedToy;
@@ -38,31 +41,33 @@ namespace wpf_ui.ViewModels
         private ObservableCollection<ToyViewModel> _toyList = new();
         public IEnumerable<ToyViewModel> ToyList => _toyList;
 
-        public void UpdateToys(ICollection<Toy> toys)
+        public void UpdateToys()
         {
-            foreach (var item in toys)
+            _cartMediator.InCartToys.ToList().ForEach(obj => _toyList.Add(new ToyViewModel()
             {
-                _toyList.Add(new ToyViewModel()
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Description = item.Description,
-                    Price = item.Price,
-                    Subject = item.Subject,
-                });
-            }
+                Id = obj.Key,
+                Name = obj.Value.Name,
+                Description = obj.Value.Description,
+                Price = obj.Value.Price,
+                Subject = obj.Value.Subject,
+            }));
+        }
+
+        public void DeleteSelected()
+        {
+            _toyList.Remove(_selectedToy);
         }
 
         public static ToyCartViewModel CreateWithLoadedList(
-            ToysListMediator toysListMediator, 
+            CartMediator cartMediator, 
             NavigationService<ToyListViewModel> navigateToViewService)
         {
-            var vm = new ToyCartViewModel(toysListMediator, navigateToViewService);
-            vm.LoadInCartToys.Execute(null);
+            var vm = new ToyCartViewModel(cartMediator,navigateToViewService);
+            vm.UpdateToys();
             return vm;
         }
 
-        public ICommand LoadInCartToys { get; }
+        public ICommand LoadInCartToys { get; set; }
         public ICommand DeleteFromCart { get; }
         public ICommand Equip { get; }
         public ICommand BackToStore { get; }

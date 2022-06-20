@@ -32,60 +32,54 @@ namespace wpf_ui.ViewModels
 
         private ObservableCollection<ToyViewModel> _toyList = new();
         public IEnumerable<ToyViewModel> ToyList => _toyList;
-        
+
         public void UpdateToys(ICollection<Toy> toys)
         {
             _toyList.Clear();
             foreach (var item in toys)
             {
-                _toyList.Add(new ToyViewModel()
+                _toyList.Add(new ToyViewModel
                 {
-                    Id = item.Id,
+                    Id = item.Id, 
                     Name = item.Name,
-                    Description = item.Description,
                     Price = item.Price,
+                    Description = item.Description,
                     Subject = item.Subject,
                 });
             }
             OnPropertyChanged(nameof(ToyList));
         }
 
-        public void OnDeleteToy(int toyId, ICollection<Toy> toys)
+        public void DeleteSelectedToy()
         {
-            //var ts1 = toys.Select(obj => obj.Id);
-            //var ts2 = _toyList.Select(obj => obj.Id);
-
-            //var linked = new LinkedList<ToyViewModel>(_toysListMediator.Toys.ToList());
-            //var foundVM = linked.FirstOrDefault(obj => obj.Id == toyId);
-            //var foundNode = linked.Find(foundVM);
-            //var s = foundNode.Previous?.Value;
-            
-            //linked.Remove(foundNode);
-            //_toyList.Clear();
-
-            //foreach (var item in linked)
-            //{
-            //    _toyList.Add(item);
-            //}
-
-            //SelectedToy = s;
+            _toyList.Remove(SelectedToy);
         }
 
         public ToyListViewModel(
+            CartMediator cartMediator,
             ToysListMediator toysListMediator, 
-            NavigationService<CreateToyViewModel> navigateToTheViewService)
+            NavigationService<CreateToyViewModel> navigateToTheViewService,
+            NavigationService<ToyCartViewModel> toyCartViewModel
+            )
         {
             _toysListMediator = toysListMediator;
             LoadToys = new LoadToysCommand(this, toysListMediator);
+            LoadCart = new LoadInCartToysCommand(cartMediator);
             AddToy = new NavigateCommand<CreateToyViewModel>(navigateToTheViewService);
             UpdateToy = new UpdateToyCommand(this, toysListMediator);
             DeleteToy = new DeleteToyCommand(this, toysListMediator);
-            _toysListMediator.ToyListChanged += UpdateToys;
+            AddToCart = new AddToCartCommand(this, cartMediator);
+            ShowCart = new NavigateCommand<ToyCartViewModel>(toyCartViewModel);
         }
 
-        public static ToyListViewModel CreateWithLoadedList(ToysListMediator toysListMediator, NavigationService<CreateToyViewModel> navigateToTheViewService)
+        public static ToyListViewModel CreateWithLoadedListAndCart(
+            CartMediator cartMediator, 
+            ToysListMediator toysListMediator, 
+            NavigationService<CreateToyViewModel> navigateToTheViewService, 
+            NavigationService<ToyCartViewModel> toyCartViewModel)
         {
-            var vm = new ToyListViewModel(toysListMediator, navigateToTheViewService);
+            var vm = new ToyListViewModel(cartMediator, toysListMediator, navigateToTheViewService, toyCartViewModel);
+            vm.LoadCart.Execute(null);
             vm.LoadToys.Execute(null);
             return vm;
         }
@@ -95,5 +89,7 @@ namespace wpf_ui.ViewModels
         public ICommand DeleteToy { get; }
         public ICommand AddToCart { get; }
         public ICommand LoadToys { get; }
+        public ICommand LoadCart { get; }
+        public ICommand ShowCart { get; }
     }
 }

@@ -8,8 +8,16 @@
         xmlns:views="clr-namespace:wpf_ui.Views"
         mc:Ignorable="d"
         Title="Toy Store" 
-        Height="450" 
-        Width="800">
+        WindowStyle="None"
+        MouseDown="Window_MouseDown"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         TextElement.FontWeight="Regular"
+         TextElement.FontSize="13"
+         TextOptions.TextFormattingMode="Ideal"
+         TextOptions.TextRenderingMode="Auto"
+        
+         FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type vm:CreateToyViewModel}">
@@ -26,5 +34,7 @@
             </DataTemplate>
         </Grid.Resources>
         <ContentControl Content="{Binding CurrentVM}"/>
+        
+
     </Grid>
 </Window>
