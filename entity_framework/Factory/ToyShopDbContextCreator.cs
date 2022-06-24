@@ -10,10 +10,10 @@ namespace entity_framework.Factory
         ToyStoreDataContext CreateContext();
     }
 
-    public class ToyStoreDbContextCreator: IToyStoreContextCreator, IDesignTimeDbContextFactory<ToyStoreDataContext>
+    public class SQLServerToyStoreDbContextCreator: IToyStoreContextCreator, IDesignTimeDbContextFactory<ToyStoreDataContext>
     {
         private readonly string _connectionString;
-        public ToyStoreDbContextCreator(string connectionString)
+        public SQLServerToyStoreDbContextCreator(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -27,7 +27,7 @@ namespace entity_framework.Factory
         }
 
         #region Required code for another migration
-        public ToyStoreDbContextCreator()
+        public SQLServerToyStoreDbContextCreator()
         {
 
         }

@@ -30,7 +30,7 @@ namespace wpf_ui
                 .ConfigureServices((host_context, services) => 
                 {
                     string db_connection_string = host_context.Configuration.GetConnectionString("Default");
-                    services.AddSingleton<IToyStoreContextCreator>(new ToyStoreDbContextCreator(db_connection_string));
+                    services.AddSingleton<IToyStoreContextCreator>(new SQLServerToyStoreDbContextCreator(db_connection_string));
 
                     // data providers & mutator
                     services.AddSingleton<IDataProviderService<entities.DTO.Toy>, DataProviderService<entities.DTO.Toy>>();
@@ -41,14 +41,6 @@ namespace wpf_ui
                     services.AddSingleton<IDataMutatorService<entities.DTO.Toy>, DataMutatorService<entities.DTO.Toy>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.Profile>, DataMutatorService<entities.DTO.Profile>>();
                     services.AddSingleton<IDataMutatorService<entities.DTO.ProfileToy>, DataMutatorService<entities.DTO.ProfileToy>>();
-
-                    // data providers & mutator adapters
-                    //services.AddSingleton<IDataProvider<entities.DTO.Toy>, DataProviderServiceAdapter<entities.DTO.Toy>>();
-                    //services.AddSingleton<IDataProvider<entities.DTO.User>, DataProviderServiceAdapter<entities.DTO.User>>();
-                    //services.AddSingleton<IDataMutator<entities.DTO.User>, DataMutatorServiceAdapter<entities.DTO.User>>();
-                    //services.AddSingleton<IDataMutator<entities.DTO.Toy>, DataMutatorServiceAdapter<entities.DTO.Toy>>();
-                    //services.AddSingleton<IDataMutator<entities.DTO.Profile>, DataMutatorServiceAdapter<entities.DTO.Profile>>();
-
 
                     //
                     services.AddSingleton<TheStore>();
